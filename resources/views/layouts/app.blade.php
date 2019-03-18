@@ -87,6 +87,7 @@
     <script src="{{ asset('js/jquery.matchHeight.min.js') }}"></script>
     <script src="{{ asset('js/toastr.min.js') }}"></script>
     <script src="{{ asset('js/print.min.js') }}"></script>
+    <script src="{{ asset('js/numberconvert.js') }}"></script>
     <script>
         
         window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -99,6 +100,7 @@
             console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
         }
     </script>
+    
     @yield('scripts')
 </body>
 </html>
