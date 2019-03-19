@@ -8,6 +8,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
+                @{{ $data.certificado }}
                 <div class="row form-group">
                     <div class="col-md-4">
                         <label for="">Fecha:</label>
@@ -21,7 +22,7 @@
                         <label for="">Saldo:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" step=".01">
+                        <input type="number" class="form-control" step=".01" v-model="certificado.saldo">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -29,7 +30,7 @@
                         <label for="">Literal:</label>
                     </div>
                     <div class="col-md-8">
-                        <textarea class="form-control" name="" id="" rows="2" disabled></textarea>
+                        <textarea class="form-control" name="" id="" rows="3" disabled v-model="convert"></textarea>
                     </div>
                 </div>
             </div>
@@ -54,15 +55,15 @@
                     <div class="col-md-4">
                         <label for=""></label>
                     </div>
-                    <div class="col-md-8">
-                        <input type="submit" class="btn btn-info" value="Reservar">
+                    <div class="col-md-8 pt-3">
+                        <button class="btn btn-info btn-block" @click.prevent="reservation()">Reservar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <hr>
-    <div class="card-body">
+    <div v-if="reserve" class="card-body">
         <div class="row">
             <div class="col-md-6">
                 <div class="row form-group">
@@ -165,7 +166,7 @@
         </div>
     </div>
     <hr>
-    <div class="card-body">
+    <div v-if="reserve" class="card-body">
         <table class="table">
             <thead>
                 <tr>
@@ -209,9 +210,22 @@ const app = new Vue({
     el: '#app',
     data(){
         return{
-            step: false
+            reserve: false,
+            certificado: {},
+            convert: ''
         }
     },
+    methods:{
+        reservation(){
+            this.reserve = true;
+            this.convert = numeroALetras(this.certificado.saldo, {
+                plural: "Bolivianos",
+                singular: "Boliviano",
+                centPlural: "Centavos",
+                centSingular: "centavo"
+            });
+        }
+    }
     
 })
 </script>
