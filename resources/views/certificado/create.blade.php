@@ -14,7 +14,7 @@
                         <label for="">Fecha:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" v-model="fecha">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -40,7 +40,7 @@
                         <label for="">Gestión:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="number" class="form-control">
+                        <input type="number" class="form-control" v-model="gestion">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -212,7 +212,9 @@ const app = new Vue({
         return{
             reserve: false,
             certificado: {},
-            convert: ''
+            convert: '',
+            gestion: '',
+            fecha: ''
         }
     },
     methods:{
@@ -225,7 +227,21 @@ const app = new Vue({
                 centSingular: "centavo"
             });
         }
-    }
+    },
+    mounted() {
+        var today = new Date();
+        var dd = today.getDate();
+        if(dd < 10){
+            dd = '0'+dd;
+        }
+        var mm = today.getMonth()+1;
+        if(mm < 10){
+            mm = '0'+mm;
+        }
+        var yyyy = today.getFullYear();
+        this.gestion = yyyy;
+        this.fecha = yyyy+'-'+mm+'-'+dd;
+    },
     
 })
 </script>
