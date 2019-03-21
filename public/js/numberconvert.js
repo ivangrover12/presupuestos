@@ -5,23 +5,23 @@ var numeroALetras = (function() {
 
         switch (num) {
             case 1:
-                return 'UN';
+                return 'un';
             case 2:
-                return 'DOS';
+                return 'dos';
             case 3:
-                return 'TRES';
+                return 'tres';
             case 4:
-                return 'CUATRO';
+                return 'cuatro';
             case 5:
-                return 'CINCO';
+                return 'cinco';
             case 6:
-                return 'SEIS';
+                return 'seis';
             case 7:
-                return 'SIETE';
+                return 'siete';
             case 8:
-                return 'OCHO';
+                return 'ocho';
             case 9:
-                return 'NUEVE';
+                return 'nueve';
         }
 
         return '';
@@ -36,41 +36,41 @@ var numeroALetras = (function() {
             case 1:
                 switch (unidad) {
                     case 0:
-                        return 'DIEZ';
+                        return 'diez';
                     case 1:
-                        return 'ONCE';
+                        return 'once';
                     case 2:
-                        return 'DOCE';
+                        return 'doce';
                     case 3:
-                        return 'TRECE';
+                        return 'trece';
                     case 4:
-                        return 'CATORCE';
+                        return 'catorce';
                     case 5:
-                        return 'QUINCE';
+                        return 'quince';
                     default:
-                        return 'DIECI' + Unidades(unidad);
+                        return 'dieci' + Unidades(unidad);
                 }
             case 2:
                 switch (unidad) {
                     case 0:
-                        return 'VEINTE';
+                        return 'veinte';
                     default:
-                        return 'VEINTI' + Unidades(unidad);
+                        return 'veinti' + Unidades(unidad);
                 }
             case 3:
-                return DecenasY('TREINTA', unidad);
+                return DecenasY('treinta', unidad);
             case 4:
-                return DecenasY('CUARENTA', unidad);
+                return DecenasY('cuarenta', unidad);
             case 5:
-                return DecenasY('CINCUENTA', unidad);
+                return DecenasY('cincuenta', unidad);
             case 6:
-                return DecenasY('SESENTA', unidad);
+                return DecenasY('sesenta', unidad);
             case 7:
-                return DecenasY('SETENTA', unidad);
+                return DecenasY('setenta', unidad);
             case 8:
-                return DecenasY('OCHENTA', unidad);
+                return DecenasY('ochenta', unidad);
             case 9:
-                return DecenasY('NOVENTA', unidad);
+                return DecenasY('noventa', unidad);
             case 0:
                 return Unidades(unidad);
         }
@@ -78,7 +78,7 @@ var numeroALetras = (function() {
 
     function DecenasY(strSin, numUnidades) {
         if (numUnidades > 0)
-            return strSin + ' Y ' + Unidades(numUnidades)
+            return strSin + ' y ' + Unidades(numUnidades)
 
         return strSin;
     } //DecenasY()
@@ -90,24 +90,24 @@ var numeroALetras = (function() {
         switch (centenas) {
             case 1:
                 if (decenas > 0)
-                    return 'CIENTO ' + Decenas(decenas);
-                return 'CIEN';
+                    return 'ciento ' + Decenas(decenas);
+                return 'cien';
             case 2:
-                return 'DOSCIENTOS ' + Decenas(decenas);
+                return 'doscientos ' + Decenas(decenas);
             case 3:
-                return 'TRESCIENTOS ' + Decenas(decenas);
+                return 'trescientos ' + Decenas(decenas);
             case 4:
-                return 'CUATROCIENTOS ' + Decenas(decenas);
+                return 'cuatrocientos ' + Decenas(decenas);
             case 5:
-                return 'QUINIENTOS ' + Decenas(decenas);
+                return 'quinientos ' + Decenas(decenas);
             case 6:
-                return 'SEISCIENTOS ' + Decenas(decenas);
+                return 'seiscientos ' + Decenas(decenas);
             case 7:
-                return 'SETECIENTOS ' + Decenas(decenas);
+                return 'setecientos ' + Decenas(decenas);
             case 8:
-                return 'OCHOCIENTOS ' + Decenas(decenas);
+                return 'ochocientos ' + Decenas(decenas);
             case 9:
-                return 'NOVECIENTOS ' + Decenas(decenas);
+                return 'novecientos ' + Decenas(decenas);
         }
 
         return Decenas(decenas);
@@ -136,7 +136,7 @@ var numeroALetras = (function() {
         let cientos = Math.floor(num / divisor)
         let resto = num - (cientos * divisor)
 
-        let strMiles = Seccion(num, divisor, 'UN MIL', 'MIL');
+        let strMiles = Seccion(num, divisor, 'un mil', 'mil');
         let strCentenas = Centenas(resto);
 
         if (strMiles == '')
@@ -150,7 +150,7 @@ var numeroALetras = (function() {
         let cientos = Math.floor(num / divisor)
         let resto = num - (cientos * divisor)
 
-        let strMillones = Seccion(num, divisor, 'UN MILLON DE', 'MILLONES DE');
+        let strMillones = Seccion(num, divisor, 'un millon de', 'millones de');
         let strMiles = Miles(resto);
 
         if (strMillones == '')
@@ -173,7 +173,7 @@ var numeroALetras = (function() {
         };
 
         if (data.centavos > 0) {
-            data.letrasCentavos = 'CON ' + (function() {
+            data.letrasCentavos = 'con ' + (function() {
                 if (data.centavos == 1)
                     return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoSingular;
                 else
@@ -182,7 +182,7 @@ var numeroALetras = (function() {
         };
 
         if (data.enteros == 0)
-            return 'CERO ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+            return 'cero ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
         if (data.enteros == 1)
             return Millones(data.enteros) + ' ' + data.letrasMonedaSingular + ' ' + data.letrasCentavos;
         else

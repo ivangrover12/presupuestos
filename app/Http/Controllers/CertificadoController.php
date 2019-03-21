@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Certificado;
+use App\Certificado2;
+use App\CatProg;
+use App\ClasGast;
+use App\Das;
 use Illuminate\Http\Request;
 
 class CertificadoController extends Controller
@@ -28,6 +32,45 @@ class CertificadoController extends Controller
         return view('certificado.create');
     }
 
+    public function models(){
+        $das = Das::where('entidad', 47)->where('da', 1)->first();
+        $cert = Certificado::orderby('cod', 'DESC')->first();
+        $count = $cert->cod;
+        return [$das, $count];
+    }
+
+    public function findue($ue){
+        $das = Das::where('entidad', 47)->where('da', 1)->where('ue', $ue)->first();
+        if ($das) {
+            $result = $das->desc_ue;
+            return $result;
+        }
+        else{
+            return '';
+        }
+    }
+
+    public function findgast($gast){
+        $gast = ClasGast::where('class_gast', $gast)->first();
+        if ($gast) {
+            $result = $gast->descrip;
+            return $result;
+        }
+        else{
+            return '';
+        }
+    }
+
+    public function findnombre($da, $ue, $prog, $act, $proy){
+        $cat = CatProg::where('da', $da)->where('ue', $ue)->where('prog', $prog)->where('act', $act)->where('proy', $proy)->orderBy('gestion', 'DESC')->first();
+        if ($cat) {
+            $result = $cat->nombre;
+            return $result;
+        }
+        else{
+            return '';
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
