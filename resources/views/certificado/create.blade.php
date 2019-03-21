@@ -172,7 +172,7 @@
                         <button class="btn btn-warning btn-block">Modificar</button>
                     </div>
                     <div class="col-md-6">
-                        <button class="btn btn-success btn-block" @click.prevent="addCertificate(certificado)">Nuevo</button>
+                        <button class="btn btn-success btn-block" @click.prevent="addCertificate()">Nuevo</button>
                     </div>
                 </div>
             </div>
@@ -184,43 +184,55 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Entidad</th>
-                    <th>D.A.</th>
-                    <th>U.E.</th>
-                    <th>Tipo Gasto</th>
-                    <th>Prog</th>
-                    <th>Proy</th>
-                    <th>Act.</th>
-                    <th>Sisin</th>
+                    <th class="text-center">Entidad</th>
+                    <th class="text-center">D.A.</th>
+                    <th class="text-center">U.E.</th>
+                    <th class="text-center">Tipo Gasto</th>
+                    <th class="text-center">Prog</th>
+                    <th class="text-center">Proy</th>
+                    <th class="text-center">Act.</th>
+                    <th class="text-center">Sisin</th>
                     <th></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <th></th>
-                    <th>Entidad</th>
-                    <th>D.A.</th>
-                    <th>U.E.</th>
-                    <th>Tipo Gasto</th>
-                    <th>Prog</th>
-                    <th>Proy</th>
-                    <th>Act.</th>
-                    <th>Sisin</th>
-                    <th></th>
+                    <th class="text-center">Entidad</th>
+                    <th class="text-center">D.A.</th>
+                    <th class="text-center">U.E.</th>
+                    <th class="text-center">Tipo Gasto</th>
+                    <th class="text-center">Prog</th>
+                    <th class="text-center">Proy</th>
+                    <th class="text-center">Act.</th>
+                    <th class="text-center">Sisin</th>
+                    <th class="text-center"></th>
                 </tr>
             </tfoot>
             <tbody>
-                <tr v-for="certificate in certificados">
-                    <td></td>
-                    <td>@{{ certificate.entidad }}</td>
-                    <td>@{{ certificate.da }}</td>
-                    <td>@{{ certificate.ue }}</td>
-                    <td>@{{ certificate.tipo_gasto }}</td>
-                    <td>@{{ certificate.prog }}</td>
-                    <td>@{{ certificate.proy }}</td>
-                    <td>@{{ certificate.act }}</td>
-                    <td>@{{ certificate.sisin }}</td>
-                    <td></td>
+                <tr>
+                    <td class="text-center">@{{ cod }}</td>
+                    <td class="text-center">@{{ das.entidad }}</td>
+                    <td class="text-center">@{{ das.da }}</td>
+                    <td class="text-center">@{{ ue }}</td>
+                    <td class="text-center">@{{ gast }}</td>
+                    <td class="text-center">@{{ prog }}</td>
+                    <td class="text-center">@{{ proy }}</td>
+                    <td class="text-center">@{{ act }}</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                </tr>
+                <tr v-for="(certificate, index) in certificados">
+                    <td class="text-center">@{{ certificate.cod }}</td>
+                    <td class="text-center">@{{ certificate.entidad }}</td>
+                    <td class="text-center">@{{ certificate.da }}</td>
+                    <td class="text-center">@{{ certificate.ue }}</td>
+                    <td class="text-center">@{{ certificate.gast }}</td>
+                    <td class="text-center">@{{ certificate.prog }}</td>
+                    <td class="text-center">@{{ certificate.proy }}</td>
+                    <td class="text-center">@{{ certificate.act }}</td>
+                    <td class="text-center">@{{ certificate.sisin }}</td>
+                    <td class="text-center"><button @click.prevent="deleteCert(index)">Borrar</button></td>
                 </tr>
             </tbody>
         </table>
@@ -268,9 +280,22 @@ const app = new Vue({
         first(string){
             return string.charAt(0).toUpperCase() + string.slice(1);
         },
-        addCertificate(certificate){
-            this.certificados.push(certificate);
+        addCertificate(){
+            this.certificado.cod = this.cod;
+            this.certificado.entidad = this.das.entidad;
+            this.certificado.da = this.das.da;
+            this.certificado.ue = this.ue;
+            this.certificado.gast = this.gast;
+            this.certificado.prog = this.prog;
+            this.certificado.proy = this.proy;
+            this.certificado.act = this.act;
+            this.certificado.sisin = '';
+            this.certificados.push(this.certificado);
             this.certificado = {};
+            this.cod = this.cod + 1;
+        },
+        deleteCert(index){
+            this.certificados.splice(index, 1);
         },
         findUE(){
             if(this.ue != ''){
