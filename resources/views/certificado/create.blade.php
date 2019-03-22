@@ -23,7 +23,7 @@
                         <label for="">Saldo:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" step="0.01" v-model="saldo">
+                        <input type="number" class="form-control" step="0.01" v-model="saldo" disabled>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -41,7 +41,7 @@
                         <label for="">Gestión:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" v-model="gestion">
+                        <input type="number" class="form-control" v-model="gestion" disabled>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -49,7 +49,7 @@
                         <label for="">Secuencia:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" v-model="secuencia">
+                        <input type="number" class="form-control" v-model="secuencia" disabled>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -300,7 +300,9 @@ const app = new Vue({
         findUE(){
             if(this.ue != ''){
                 axios.get('/find/findue/'+this.ue).then(response => {
-                    this.desc_ue = response.data;
+                    const temp = response.data;
+                    this.desc_ue = temp.desc_ue;
+                    this.das = temp;
                 });
             }
         },
@@ -333,7 +335,6 @@ const app = new Vue({
         this.gestion = yyyy;
         this.fecha = yyyy+'-'+mm+'-'+dd;
         axios.get('/certificado/models').then(response =>{
-            this.das = response.data[0];
             this.cod = response.data[1] + 1;
 
         });

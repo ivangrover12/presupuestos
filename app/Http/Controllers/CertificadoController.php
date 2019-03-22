@@ -40,9 +40,9 @@ class CertificadoController extends Controller
     }
 
     public function findue($ue){
-        $das = Das::where('entidad', 47)->where('da', 1)->where('ue', $ue)->first();
+        $das = Das::where('da', 1)->where('ue', $ue)->orderBy('gestion', 'ASC')->first();
         if ($das) {
-            $result = $das->desc_ue;
+            $result = $das;
             return $result;
         }
         else{
@@ -70,6 +70,11 @@ class CertificadoController extends Controller
         else{
             return '';
         }
+    }
+
+    public function getcertifi($year){
+        $result = Certificado::where('gest', $year)->orderBy('cod', 'DESC')->get();
+        return $result;
     }
     /**
      * Store a newly created resource in storage.
