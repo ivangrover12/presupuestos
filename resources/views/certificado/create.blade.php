@@ -57,13 +57,14 @@
                         <label for=""></label>
                     </div>
                     <div class="col-md-8 pt-3">
-                        <button class="btn btn-info btn-block" @click.prevent="reservation()">Reservar</button>
+                        <button v-if="!secuencia" class="btn btn-info btn-block" @click.prevent="reservation()">Reservar</button>
+                        <button v-else class="btn btn-info btn-block" @click.prevent="reservation()" disabled>Reservar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <hr>
+    <hr v-if="reserve">
     <div v-if="reserve" class="card-body">
         <div class="row">
             <div class="col-md-6">
@@ -94,7 +95,7 @@
                         <label for="">U.E. :</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" v-model="ue" @keyup="findUE()">
+                        <input type="text" class="form-control" :class="ue ? '' : 'bg-warning'" v-model="ue" @keyup="findUE()">
                     </div>
                     <div class="col-md-7">
                         <input type="text" class="form-control" disabled v-model="desc_ue">
@@ -105,7 +106,7 @@
                         <label for="">Tipo Gasto:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" v-model="gast" @keyup="findGast()">
+                        <input type="text" class="form-control" :class="gast ? '' : 'bg-warning'" v-model="gast" @keyup="findGast()">
                     </div>
                     <div class="col-md-7">
                         <input type="text" class="form-control" disabled v-model="tipo_gasto">
@@ -116,7 +117,7 @@
                         <label for="">Prog.:</label>
                     </div>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" v-model="prog">
+                        <input type="text" class="form-control" :class="prog ? '' : 'bg-warning'" v-model="prog">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -124,7 +125,7 @@
                         <label for="">Act.:</label>
                     </div>
                     <div class="col-md-9">
-                        <input type="number" class="form-control" v-model="act">
+                        <input type="number" class="form-control" :class="act ? '' : 'bg-warning'" v-model="act">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -141,14 +142,14 @@
                     <label for="">Observaciones:</label>
                 </div>
                 <div class="row form-group">
-                    <textarea class="form-control" name="" id="" rows="3"></textarea>
+                    <textarea class="form-control" name="" id="" rows="3" v-model="obs"></textarea>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-4">
                         <label for="">Proy.:</label>
                     </div>
                     <div class="col-md-8">
-                        <input type="number" class="form-control" v-model="proy" @keyup="findDetail()">
+                        <input type="number" class="form-control" :class="proy ? '' : 'bg-warning'" v-model="proy" @keyup="findDetail()">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -169,16 +170,16 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-6">
-                        <button class="btn btn-warning btn-block">Modificar</button>
+                        <button class="btn btn-warning btn-block" @click.prevent="update()">Modificar</button>
                     </div>
                     <div class="col-md-6">
-                        <button class="btn btn-success btn-block" @click.prevent="addCertificate()">Nuevo</button>
+                        <button class="btn btn-success btn-block" @click.prevent="newcert()">Nuevo</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <hr>
+    <hr v-if="reserve">
     <div v-if="reserve" class="card-body">
         <table class="table">
             <thead>
@@ -210,24 +211,12 @@
                 </tr>
             </tfoot>
             <tbody>
-                <tr>
-                    <td class="text-center">@{{ cod }}</td>
-                    <td class="text-center">@{{ das.entidad }}</td>
-                    <td class="text-center">@{{ das.da }}</td>
-                    <td class="text-center">@{{ ue }}</td>
-                    <td class="text-center">@{{ gast }}</td>
-                    <td class="text-center">@{{ prog }}</td>
-                    <td class="text-center">@{{ proy }}</td>
-                    <td class="text-center">@{{ act }}</td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                </tr>
                 <tr v-for="(certificate, index) in certificados">
-                    <td class="text-center">@{{ certificate.cod }}</td>
+                    <td class="text-center"><button @click.prevent="seleccionar(certificate)">@{{ certificate.cod }}</button></td>
                     <td class="text-center">@{{ certificate.entidad }}</td>
                     <td class="text-center">@{{ certificate.da }}</td>
                     <td class="text-center">@{{ certificate.ue }}</td>
-                    <td class="text-center">@{{ certificate.gast }}</td>
+                    <td class="text-center">@{{ certificate.tipo }}</td>
                     <td class="text-center">@{{ certificate.prog }}</td>
                     <td class="text-center">@{{ certificate.proy }}</td>
                     <td class="text-center">@{{ certificate.act }}</td>
@@ -236,6 +225,64 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <hr v-if="step">
+    <div v-if="step" class="card-body">
+        <div class="row">
+            <div class="row col-md-8">
+                <div class="col-md-2">
+                    <div class="form-group text-center">
+                        <label for="">FF</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group text-center">
+                        <label for="">ORG</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group text-center">
+                        <label for="">PART</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group text-center">
+                        <label for="">PT. LEY</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group text-center">
+                        <label for="">PT. MOD</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group text-center">
+                        <label for="">EJEC</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row col-md-4">
+                <div class="col-md-6">
+                    <div class="form-group text-center">
+                        <label for="">RESERV</label><br>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group text-center">
+                        <button class="btn btn-info btn-sm">Guardar</button>
+                        <button class="btn btn-danger btn-sm">Reporte 1</button>
+                        <button class="btn btn-danger btn-sm">Reporte 2</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -246,7 +293,8 @@ const app = new Vue({
     el: '#app',
     data(){
         return{
-            reserve: true,
+            reserve: false,
+            step: false,
             certificado: {},
             certificados: [],
             convert: '',
@@ -263,19 +311,47 @@ const app = new Vue({
             prog: '',
             act: '',
             nombre: '',
-            cod: ''
+            cod: '',
+            obs: ''
         }
     },
     methods:{
         reservation(){
             this.reserve = true;
-            var convert = numeroALetras(this.saldo, {
-                plural: "Bolivianos",
-                singular: "Boliviano",
-                centPlural: "Centavos",
-                centSingular: "Centavo"
+            const data = {
+                gestion: this.gestion,
+                fecha: this.fecha
+            };
+            axios.post('/certificado', data).then(response => {
+                this.secuencia = response.data[0];
+                this.certificados = response.data[1];
             });
-            this.convert = this.first(convert);
+            // var convert = numeroALetras(this.saldo, {
+            //     plural: "Bolivianos",
+            //     singular: "Boliviano",
+            //     centPlural: "Centavos",
+            //     centSingular: "Centavo"
+            // });
+            // this.convert = this.first(convert);
+        },
+        newcert(){
+            this.reserve = true;
+            const data = {
+                gestion: this.gestion,
+                fecha: this.fecha,
+                secuencia: this.secuencia
+            };
+            axios.post('/new', data).then(response => {
+                this.secuencia = response.data[0];
+                this.certificados = response.data[1];
+            });
+            // var convert = numeroALetras(this.saldo, {
+            //     plural: "Bolivianos",
+            //     singular: "Boliviano",
+            //     centPlural: "Centavos",
+            //     centSingular: "Centavo"
+            // });
+            // this.convert = this.first(convert);
         },
         first(string){
             return string.charAt(0).toUpperCase() + string.slice(1);
@@ -319,6 +395,35 @@ const app = new Vue({
                     this.nombre = response.data;
                 })
             }
+        },
+        update(){
+            if(this.ue && this.gast && this.proy && this.act && this.prog){
+                if(this.cod){
+                    const data = new FormData();
+                    data.append('_method', 'PATCH');
+                    data.append('ue', this.ue);
+                    data.append('gast', this.gast);
+                    data.append('proy', this.proy);
+                    data.append('prog', this.prog);
+                    data.append('act', this.act);
+                    data.append('cod', this.cod);
+                    data.append('da', this.das.da);
+                    data.append('obs', this.obs);
+                    axios.post('/certificado/'+this.cod, data).then(response => {
+                        this.certificados = response.data;
+                        toastr.success('Certificado Guardado', 'Operación exitosa');
+                    });
+                }
+                else{
+                    toastr.warning('¡Error!', 'Seleccione la partida que desea modificar')
+                }
+            }
+            else{
+                toastr.error('Complete los campos en amarillo', '¡Error!')
+            }
+        },
+        seleccionar(certificado){
+            this.cod = certificado.cod;
         }
     },
     mounted() {
@@ -334,10 +439,10 @@ const app = new Vue({
         var yyyy = today.getFullYear();
         this.gestion = yyyy;
         this.fecha = yyyy+'-'+mm+'-'+dd;
-        axios.get('/certificado/models').then(response =>{
-            this.cod = response.data[1] + 1;
+        // axios.get('/certificado/models').then(response =>{
+        //     this.cod = response.data[1] + 1;
 
-        });
+        // });
 
     },
     

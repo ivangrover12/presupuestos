@@ -40,7 +40,7 @@ class CertificadoController extends Controller
     }
 
     public function findue($ue){
-        $das = Das::where('da', 1)->where('ue', $ue)->orderBy('gestion', 'ASC')->first();
+        $das = Das::where('entidad', 47)->where('ue', $ue)->orderBy('gestion', 'ASC')->first();
         if ($das) {
             $result = $das;
             return $result;
@@ -84,7 +84,27 @@ class CertificadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cert = Certificado::where('gest', $request->gestion)->orderBy('secuencia', 'DESC')->first();
+        $nuevo = new Certificado();
+        $nuevo->secuencia = $cert->secuencia + 1;
+        $nuevo->gest = $request->gestion;
+        $nuevo->gestion = $request->fecha;
+        $nuevo->entidad = 47;
+        $nuevo->save();
+        $certificados = Certificado::where('gest', $nuevo->gest)->where('secuencia', $nuevo->secuencia)->get();
+        return [$nuevo->secuencia, $certificados];
+    }
+    public function new(Request $request)
+    {
+        $cert = Certificado::where('gest', $request->gestion)->orderBy('secuencia', 'DESC')->first();
+        $nuevo = new Certificado();
+        $nuevo->secuencia = $request->secuencia;
+        $nuevo->gest = $request->gestion;
+        $nuevo->gestion = $request->fecha;
+        $nuevo->entidad = 47;
+        $nuevo->save();
+        $certificados = Certificado::where('gest', $nuevo->gest)->where('secuencia', $nuevo->secuencia)->get();
+        return [$nuevo->secuencia, $certificados];
     }
 
     /**
@@ -118,7 +138,17 @@ class CertificadoController extends Controller
      */
     public function update(Request $request, Certificado $certificado)
     {
-        //
+        $dato = Certificado::find($request->cod);
+        $dato->da = $request->da;
+        $dato->ue = $request->ue;
+        $dato->prog = $request->prog;
+        $dato->proy = $request->proy;
+        $dato->act = $request->act;
+        $dato->obs = $request->obs;
+        $dato->tipo = $request->gast;
+        $dato->save();
+        $certificados = Certificado::where('gest', $dato->gest)->where('secuencia', $dato->secuencia)->get();
+        return $certificados;
     }
 
     /**

@@ -63,15 +63,25 @@
         
     </div>
     <div class="card-footer">
-        <div class="row text-right">
-            <div class="form-group">
-                <select class="form-control" name="" id="" @change="changeyear()" v-model="select">
-                    <option value="2019" selected>2019</option>
-                    <option value="2018">2018</option>
-                    <option value="2017">2017</option>
-                    <option value="2016">2016</option>
-                    <option value="2015">2015</option>
-                </select>
+        <div class="row text-center">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6">
+                La Paz - Bolivia
+            </div>
+            <div class="col-md-3">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="">Gestión:</label>
+                    </div>
+                    <select class="col-md-6 form-control" name="" id="" @change="changeyear()" v-model="select">
+                        <option value="2019" selected>2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -98,7 +108,6 @@ const app = new Vue({
             }
         },
         mounted() {
-            
             var today = new Date();
             var yyyy = today.getFullYear();
             this.select = yyyy;
