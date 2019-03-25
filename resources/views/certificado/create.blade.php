@@ -4,7 +4,6 @@
 <div class="card">
     <div class="card-header">
         CERTIFICACION PRESUPUESTARIA
-        @{{ $data }}
     </div>
     <div class="card-body">
         <div class="row">
@@ -117,7 +116,7 @@
                         <label for="">Prog.:</label>
                     </div>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" :class="prog ? '' : 'bg-warning'" v-model="prog">
+                        <input type="number" class="form-control" :class="prog ? '' : 'bg-warning'" v-model="prog">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -221,7 +220,7 @@
                     <td class="text-center">@{{ certificate.proy }}</td>
                     <td class="text-center">@{{ certificate.act }}</td>
                     <td class="text-center">@{{ certificate.sisin }}</td>
-                    <td class="text-center"><button @click.prevent="deleteCert(index)">Borrar</button></td>
+                    <td class="text-center"><button @click.prevent="deleteCert(certificate)">Borrar</button></td>
                 </tr>
             </tbody>
         </table>
@@ -233,37 +232,37 @@
                 <div class="col-md-2">
                     <div class="form-group text-center">
                         <label for="">FF</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.ff">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group text-center">
                         <label for="">ORG</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.org">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group text-center">
                         <label for="">PART</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.part">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group text-center">
                         <label for="">PT. LEY</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.ppto_ley">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group text-center">
                         <label for="">PT. MOD</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.ppto_mod">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group text-center">
                         <label for="">EJEC</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.eje_com">
                     </div>
                 </div>
             </div>
@@ -271,18 +270,49 @@
                 <div class="col-md-6">
                     <div class="form-group text-center">
                         <label for="">RESERV</label><br>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" v-model="certificado2.reserva">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group text-center">
-                        <button class="btn btn-info btn-sm">Guardar</button>
+                        <button class="btn btn-info btn-sm" @click.prevent="savecert2()">Guardar</button>
                         <button class="btn btn-danger btn-sm">Reporte 1</button>
                         <button class="btn btn-danger btn-sm">Reporte 2</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <hr v-if="cert2">
+    <div v-if="cert2" class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">COD</th>
+                    <th class="text-center">FF</th>
+                    <th class="text-center">ORG</th>
+                    <th class="text-center">PART</th>
+                    <th class="text-center">PPTO LEY</th>
+                    <th class="text-center">PPTO MOD</th>
+                    <th class="text-center">EJE COM</th>
+                    <th class="text-center">RESERVA</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">@{{ get_cert.cod_cert }}</td>
+                    <td class="text-center">@{{ get_cert.ff }}</td>
+                    <td class="text-center">@{{ get_cert.org }}</td>
+                    <td class="text-center">@{{ get_cert.part }}</td>
+                    <td class="text-center">@{{ get_cert.ppto_ley }}</td>
+                    <td class="text-center">@{{ get_cert.ppto_mod }}</td>
+                    <td class="text-center">@{{ get_cert.eje_com }}</td>
+                    <td class="text-center">@{{ get_cert.reserva }}</td>
+                    <td class="text-center"><button @click.prevent="deletecert2()">Borrar</button></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
@@ -295,6 +325,7 @@ const app = new Vue({
         return{
             reserve: false,
             step: false,
+            cert2: false,
             certificado: {},
             certificados: [],
             convert: '',
@@ -312,7 +343,9 @@ const app = new Vue({
             act: '',
             nombre: '',
             cod: '',
-            obs: ''
+            obs: '',
+            certificado2: {},
+            get_cert:{}
         }
     },
     methods:{
@@ -335,6 +368,7 @@ const app = new Vue({
             // this.convert = this.first(convert);
         },
         newcert(){
+            this.step = true;
             this.reserve = true;
             const data = {
                 gestion: this.gestion,
@@ -370,9 +404,6 @@ const app = new Vue({
             this.certificado = {};
             this.cod = this.cod + 1;
         },
-        deleteCert(index){
-            this.certificados.splice(index, 1);
-        },
         findUE(){
             if(this.ue != ''){
                 axios.get('/find/findue/'+this.ue).then(response => {
@@ -397,6 +428,7 @@ const app = new Vue({
             }
         },
         update(){
+            this.step = true;
             if(this.ue && this.gast && this.proy && this.act && this.prog){
                 if(this.cod){
                     const data = new FormData();
@@ -424,6 +456,54 @@ const app = new Vue({
         },
         seleccionar(certificado){
             this.cod = certificado.cod;
+            axios.get('/cert2/'+certificado.cod).then(response => {
+                if(response.data){
+                    this.cert2 = true;
+                    this.get_cert = response.data;
+                }
+                else{
+                    this.cert2 = false;
+                    this.get_cert = '';
+                }
+            });
+        },
+        deleteCert(certificado){
+            axios.delete('/certificado/'+certificado.cod).then(response => {
+                this.certificados = response.data;
+            });
+        },
+        savecert2(){
+            const data = {
+                cod_cert: this.cod,
+                da: this.das.da,
+                ue: this.ue,
+                prog: this.prog,
+                proy: this.proy,
+                act: this.act,
+                ff: this.certificado2.ff,
+                org: this.certificado2.org,
+                part: this.certificado2.part,
+                gestion: this.gestion,
+                ppto_ley: this.certificado2.ppto_ley,
+                ppto_mod: this.certificado2.ppto_mod,
+                eje_com: this.certificado2.eje_com,
+                reserva: this.certificado2.reserva
+            };
+            axios.post('/cert2/create', data).then(response => {
+                if(response.data){
+                    this.cert2 = true;
+                    this.get_cert = response.data;
+                }
+                else{
+                    this.cert2 = false;
+                }
+            });
+        },
+        deletecert2(){
+            axios.delete('/cert2/delete/'+this.get_cert.cod).then(response => {
+                this.cert2 = false;
+                this.get_cert = {};
+            });
         }
     },
     mounted() {

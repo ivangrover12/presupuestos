@@ -124,9 +124,9 @@ class CertificadoController extends Controller
      * @param  \App\Certificado  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function edit(Certificado $certificado)
+    public function edit($secuencia)
     {
-        //
+        return $secuencia;
     }
 
     /**
@@ -157,8 +157,66 @@ class CertificadoController extends Controller
      * @param  \App\Certificado  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Certificado $certificado)
+    public function destroy($id)
     {
-        //
+        $dato = Certificado::find($id);
+        $dato->delete();
+        $certificados = Certificado::where('gest', $dato->gest)->where('secuencia', $dato->secuencia)->get();
+        return $certificados;
+    }
+
+    public function getcert2($id){
+        $cert2 = Certificado2::where('cod_cert', $id)->first();
+        if ($cert2) {
+            return $cert2;
+        }
+        else{
+            return '';
+        }
+    }
+
+    public function addcert2(Request $request){
+        $cert2 = Certificado2::where('cod_cert', $request->cod)->first();
+        if ($cert2) {
+            $cert2->da = $request->da;
+            $cert2->ue = $request->ue;
+            $cert2->prog = $request->prog;
+            $cert2->proy = $request->proy;
+            $cert2->act = $request->act;
+            $cert2->ff = $request->ff;
+            $cert2->org = $request->org;
+            $cert2->part = $request->part;
+            $cert2->gestion = $request->gestion;
+            $cert2->ppto_ley = $request->ppto_ley;
+            $cert2->ppto_mod = $request->ppto_mod;
+            $cert2->eje_com = $request->eje_com;
+            $cert2->reserva = $request->reserva;
+            $cert2->save();
+            return $cert2;
+        }
+        else{
+            $cert2 = new Certificado2();
+            $cert2->cod_cert = $request->cod_cert;
+            $cert2->da = $request->da;
+            $cert2->ue = $request->ue;
+            $cert2->prog = $request->prog;
+            $cert2->proy = $request->proy;
+            $cert2->act = $request->act;
+            $cert2->ff = $request->ff;
+            $cert2->org = $request->org;
+            $cert2->part = $request->part;
+            $cert2->gestion = $request->gestion;
+            $cert2->ppto_ley = $request->ppto_ley;
+            $cert2->ppto_mod = $request->ppto_mod;
+            $cert2->eje_com = $request->eje_com;
+            $cert2->reserva = $request->reserva;
+            $cert2->save();
+            return $cert2;
+        }
+    }
+
+    public function destroy2($id){
+        $cert2 = Certificado2::find($id);
+        $cert2->delete();
     }
 }

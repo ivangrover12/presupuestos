@@ -13,12 +13,18 @@
 <div class="card">
     <div class="card-header">
       Listado de certificados
+      @{{ $data.secuencia }}
     </div>
     <div class="card-body">
-        <div class="row">
-            <button type="button" class="btn btn-info" title="Documentos guardados" disabled>Editar</button> 
-            <button type="button" class="btn btn-danger" title="Editar Proveedor" disabled>Reporte 1</button> 
-            <button type="button" class="btn btn-danger" title="Eliminar Proveedor" disabled>Reporte 2</button>
+        <div v-if="secuencia" class="row">
+            <a class="btn btn-info">Editar</a> 
+            <button type="button" class="btn btn-danger">Reporte 1</button> 
+            <button type="button" class="btn btn-danger">Reporte 2</button>
+        </div>
+        <div v-else class="row">
+            <button type="button" class="btn btn-info" disabled>Editar</button> 
+            <button type="button" class="btn btn-danger" disabled>Reporte 1</button> 
+            <button type="button" class="btn btn-danger" disabled>Reporte 2</button>
         </div>
         <div class="row mt-3">
             <table id="bootstrap-data-table-export" class="table table-striped table-bordered dt-responsive nowrap">
@@ -47,7 +53,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        <tr v-for="(certificado, index) in certificados">
+                        <tr v-for="(certificado, index) in certificados" @click.prevent="selectSecuencia(certificado.secuencia)">
                             <td>@{{ certificado.secuencia }}</td>
                             <td>@{{ certificado.entidad }}</td>
                             <td>@{{ certificado.da }}</td>
@@ -104,7 +110,8 @@ const app = new Vue({
         data(){
             return{
                 select: '',
-                certificados: []
+                certificados: [],
+                secuencia: ''
             }
         },
         mounted() {
@@ -142,7 +149,15 @@ const app = new Vue({
                 }
                 );}, 0);
             });
-
+            $('#bootstrap-data-table-export tbody').on( 'click', 'tr', function () {
+                if ( $(this).hasClass('bg-warning') ) {
+                    $(this).removeClass('bg-warning');
+                }
+                else {
+                    $('#bootstrap-data-table-export').DataTable().$('tr.bg-warning').removeClass('bg-warning');
+                    $(this).addClass('bg-warning');
+                }
+            } );
         },
         methods: {
             changeyear(){
@@ -179,6 +194,9 @@ const app = new Vue({
                     }
                     );}, 0);
                 });
+            },
+            selectSecuencia(secuencia){
+                this.secuencia = secuencia;
             }
         },
 });
