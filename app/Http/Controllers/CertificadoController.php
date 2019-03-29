@@ -40,7 +40,7 @@ class CertificadoController extends Controller
     }
 
     public function findue($ue){
-        $das = Das::where('entidad', 47)->where('ue', $ue)->orderBy('gestion', 'ASC')->first();
+        $das = Das::where('entidad', 47)->where('ue', $ue)->orderBy('gestion', 'DESC')->first();
         if ($das) {
             $result = $das;
             return $result;

@@ -27,3 +27,6 @@ Route::get('/cert2/{id}', 'CertificadoController@getcert2');
 Route::post('/cert2/create', 'CertificadoController@addcert2');
 Route::delete('/cert2/delete/{id}', 'CertificadoController@destroy2');
 Route::resource('certificado', 'CertificadoController');
+Route::resource('registro', 'RegistroController');
+Route::get('/getregistro/{year}', 'RegistroController@getregistro');
+

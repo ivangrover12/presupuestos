@@ -40,9 +40,7 @@
             </div>
         </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
@@ -56,11 +54,23 @@
                 <a class="dropdown-item" href="{{ route('certificado.index') }}">Listar</a>
               </div>
             </li>
+            <li>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Registro
+              </a>
+               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ route('registro.create') }}">Nuevo</a>
+                <a class="dropdown-item" href="{{ route('registro.index') }}">Listar</a>
+              </div>
+              </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Registro</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Ediciones</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Adiciones</a>
+                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ route('certificado.create') }}">DA y UE</a>
+                <a class="dropdown-item" href="{{ route('certificado.index') }}">Estructura Programatica</a>
+                <a class="dropdown-item" href="{{ route('certificado.index') }}">Documentos</a>
+                <a class="dropdown-item" href="{{ route('certificado.index') }}">Ff</a>
+                <a class="dropdown-item" href="{{ route('certificado.index') }}">Categorias Programaticas</a>
+              </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Usuarios</a>

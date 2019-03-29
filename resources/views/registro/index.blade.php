@@ -12,57 +12,68 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-      Listado de certificados
-      @{{ $data.secuencia }}
+      REGISTRO
+      @{{ $data.sec }}
     </div>
     <div class="card-body">
-        <div v-if="secuencia" class="row">
+        <div v-if="sec" class="row">
             <a class="btn btn-info">Editar</a>
-            <button type="button" class="btn btn-danger">Reporte 1</button> 
-            <button type="button" class="btn btn-danger">Reporte 2</button>
+            <button type="button" class="btn btn-danger">Reporte </button> 
         </div>
         <div v-else class="row">
             <button type="button" class="btn btn-info" disabled>Editar</button> 
-            <button type="button" class="btn btn-danger" disabled>Reporte 1</button> 
-            <button type="button" class="btn btn-danger" disabled>Reporte 2</button>
+                     <button type="button" class="btn btn-danger" disabled>Reporte  </button>
         </div>
         <div class="row mt-3">
             <table id="bootstrap-data-table-export" class="table table-striped table-bordered dt-responsive nowrap">
                     <thead>
                         <tr>
                             <th>Secuencia</th>
-                            <th>Entidad</th>
+                            <th>Lugar</th>
+                            <th>Entida</th>
                             <th>DA</th>
                             <th>UE</th>
-                            <th>PROG</th>
-                            <th>PROY</th>
-                            <th>Fecha</th>
-                            <th>Monto</th>
+                            <th>F. Elabo</th>
+                            <th>Tipo Doc</th>
+                            <th>C. Gasto</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Secuencia</th>
-                            <th>Entidad</th>
+                             <th>Secuencia</th>
+                            <th>Lugar</th>
+                            <th>Entida</th>
                             <th>DA</th>
                             <th>UE</th>
-                            <th>PROG</th>
-                            <th>PROY</th>
-                            <th>Fecha</th>
-                            <th>Liter</th>
+                            <th>F. Elabo</th>
+                            <th>Tipo Doc</th>
+                            <th>C. Gasto</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        <tr v-for="(certificado, index) in certificados" @click="selectSecuencia(certificado.secuencia)">
-                            <td>@{{ certificado.secuencia }}</td>
-                            <td>@{{ certificado.entidad }}</td>
-                            <td>@{{ certificado.da }}</td>
-                            <td>@{{ certificado.ue }}</td>
-                            <td>@{{ certificado.prog }}</td>
-                            <td>@{{ certificado.proy }}</td>
-                            <td>@{{ certificado.gestion }}</td>
+                        <tr v-for="(registro, index) in registros" @click="selectSec(registro.sec)">
+                            <td>@{{ registro.sec }}</td>
+                            <td>@{{ registro.lugar }}</td>
+                            <td>@{{ registro.entidad }}</td>
+                            <td>@{{ registro.dir }}</td>
+                            <td>@{{ registro.ue }}</td>
+                            <td>@{{ registro.f_elabo }}</td>
+                            <td>@{{ registro.tip }}</td>
+                            <td>@{{ registro.clas_gasto }}</td>
                             <td></td>
                         </tr>
+                    <!--     @foreach($registros as $registro)
+                  <tr>
+                     <td>{{ $registro->sec }}</td>
+                     <td>{{ $registro->lugar }}</td>
+                     <td>{{ $registro->entidad }}</td>
+                     <td>{{ $registro->dir }}</td>
+                     <td>{{ $registro->ue }}</td>
+                     <td>{{ $registro->f_elabo }}</td>
+                     <td>{{ $registro->tip }}</td>
+                     <td>{{ $registro->clas_gasto }}</td>
+                  </tr>
+              @endforeach -->
                     </tbody>
                 </table>
         </div>
@@ -110,16 +121,16 @@ const app = new Vue({
         data(){
             return{
                 select: '',
-                certificados: [],
-                secuencia: ''
+                registros: [],
+                sec: ''
             }
         },
         mounted() {
             var today = new Date();
             var yyyy = today.getFullYear();
             this.select = yyyy;
-            axios.get('/getcertifi/'+this.select).then(response => {
-                this.certificados = response.data;
+            axios.get('/getregistro/'+this.select).then(response => {
+                this.registros = response.data;
                 setTimeout(function(){$('#bootstrap-data-table-export').DataTable(
                 {
                         "dom": '<"text-left"<f>>rtip',
@@ -162,9 +173,9 @@ const app = new Vue({
         methods: {
             changeyear(){
                 $('#bootstrap-data-table-export').DataTable().destroy();
-                axios.get('/getcertifi/'+this.select).then(response => {
+                axios.get('/getregistro/'+this.select).then(response => {
                     //$('#bootstrap-data-table-export').DataTable().fnDestroy();
-                    this.certificados = response.data;
+                    this.registro = response.data;
                     setTimeout(function(){$('#bootstrap-data-table-export').DataTable(
                     {
                             "dom": '<"text-left"<f>>rtip',
@@ -195,8 +206,8 @@ const app = new Vue({
                     );}, 0);
                 });
             },
-            selectSecuencia(secuencia){
-                this.secuencia = secuencia;
+            selectSec(sec){
+                this.sec = sec;
             }
         },
 });

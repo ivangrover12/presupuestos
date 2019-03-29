@@ -519,6 +519,7 @@ const app = new Vue({
         var yyyy = today.getFullYear();
         this.gestion = yyyy;
         this.fecha = yyyy+'-'+mm+'-'+dd;
+        //this.fecha = dd+'-'+mm+'-'+yyyy;
         // axios.get('/certificado/models').then(response =>{
         //     this.cod = response.data[1] + 1;
 
