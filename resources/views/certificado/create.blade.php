@@ -300,7 +300,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr v-for="get_cert in certificados2">
                     <td class="text-center">@{{ get_cert.cod_cert }}</td>
                     <td class="text-center">@{{ get_cert.ff }}</td>
                     <td class="text-center">@{{ get_cert.org }}</td>
@@ -309,10 +309,33 @@
                     <td class="text-center">@{{ get_cert.ppto_mod }}</td>
                     <td class="text-center">@{{ get_cert.eje_com }}</td>
                     <td class="text-center">@{{ get_cert.reserva }}</td>
-                    <td class="text-center"><button @click.prevent="deletecert2()">Borrar</button></td>
+                    <td class="text-center"><button @click.prevent="deletecert2(get_cert)">Borrar</button></td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div class="card-footer">
+        <div class="row text-center">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6">
+                La Paz - Bolivia
+            </div>
+            <div class="col-md-3">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="">Gestión:</label>
+                    </div>
+                    <select class="col-md-6 form-control" name="" id="" v-model="select">
+                        <option value="2019" selected>2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -323,11 +346,13 @@ const app = new Vue({
     el: '#app',
     data(){
         return{
+            select: '',
             reserve: false,
             step: false,
             cert2: false,
             certificado: {},
             certificados: [],
+            certificados2: [],
             convert: '',
             gestion: '',
             fecha: '',
@@ -344,8 +369,7 @@ const app = new Vue({
             nombre: '',
             cod: '',
             obs: '',
-            certificado2: {},
-            get_cert:{}
+            certificado2: {}
         }
     },
     methods:{
@@ -368,14 +392,13 @@ const app = new Vue({
             // this.convert = this.first(convert);
         },
         newcert(){
-            this.step = true;
-            this.reserve = true;
             const data = {
                 gestion: this.gestion,
                 fecha: this.fecha,
                 secuencia: this.secuencia
             };
             axios.post('/new', data).then(response => {
+                this.step = true;
                 this.secuencia = response.data[0];
                 this.certificados = response.data[1];
             });
@@ -406,7 +429,7 @@ const app = new Vue({
         },
         findUE(){
             if(this.ue != ''){
-                axios.get('/find/findue/'+this.ue).then(response => {
+                axios.get('/find/findue/'+this.ue+'/'+this.select).then(response => {
                     const temp = response.data;
                     this.desc_ue = temp.desc_ue;
                     this.das = temp;
@@ -457,13 +480,21 @@ const app = new Vue({
         seleccionar(certificado){
             this.cod = certificado.cod;
             axios.get('/cert2/'+certificado.cod).then(response => {
-                if(response.data){
+                if(response.data[0]){
                     this.cert2 = true;
-                    this.get_cert = response.data;
+                    this.certificados2 = response.data[0];
+                    this.saldo = response.data[1];
+                    var convert = numeroALetras(this.saldo, {
+                        plural: "Bolivianos",
+                        singular: "Boliviano",
+                        centPlural: "Centavos",
+                        centSingular: "Centavo"
+                    });
+                    this.convert = this.first(convert);
                 }
                 else{
                     this.cert2 = false;
-                    this.get_cert = '';
+                    this.certificados2 = [];
                 }
             });
         },
@@ -490,19 +521,32 @@ const app = new Vue({
                 reserva: this.certificado2.reserva
             };
             axios.post('/cert2/create', data).then(response => {
-                if(response.data){
+                if(response.data[0]){
                     this.cert2 = true;
-                    this.get_cert = response.data;
+                    this.certificados2 = response.data[0];
+                    this.saldo = response.data[1];
+                    var convert = numeroALetras(this.saldo, {
+                        plural: "Bolivianos",
+                        singular: "Boliviano",
+                        centPlural: "Centavos",
+                        centSingular: "Centavo"
+                    });
+                    this.convert = this.first(convert);
                 }
                 else{
                     this.cert2 = false;
                 }
             });
         },
-        deletecert2(){
-            axios.delete('/cert2/delete/'+this.get_cert.cod).then(response => {
-                this.cert2 = false;
-                this.get_cert = {};
+        deletecert2(get_cert){
+            axios.delete('/cert2/delete/'+get_cert.cod).then(response => {
+                if(response.data){
+                    this.certificados2 = response.data;
+                }
+                else{
+                    this.cert2 = false;
+                }
+                
             });
         }
     },
@@ -519,6 +563,7 @@ const app = new Vue({
         var yyyy = today.getFullYear();
         this.gestion = yyyy;
         this.fecha = yyyy+'-'+mm+'-'+dd;
+        this.select = yyyy;
         //this.fecha = dd+'-'+mm+'-'+yyyy;
         // axios.get('/certificado/models').then(response =>{
         //     this.cod = response.data[1] + 1;

@@ -18,7 +18,7 @@ Route::get('/', function () {
 //Certificados
 
 Route::get('/certificado/models', 'CertificadoController@models');
-Route::get('/find/findue/{ue}', 'CertificadoController@findue');
+Route::get('/find/findue/{ue}/{select}', 'CertificadoController@findue');
 Route::get('/find/findgast/{gast}', 'CertificadoController@findgast');
 Route::get('/findnombre/{da}/{ue}/{prog}/{act}/{proy}', 'CertificadoController@findnombre');
 Route::get('/getcertifi/{year}', 'CertificadoController@getcertifi');

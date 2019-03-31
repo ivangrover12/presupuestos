@@ -39,8 +39,8 @@ class CertificadoController extends Controller
         return [$das, $count];
     }
 
-    public function findue($ue){
-        $das = Das::where('entidad', 47)->where('ue', $ue)->orderBy('gestion', 'DESC')->first();
+    public function findue($ue, $select){
+        $das = Das::where('entidad', 47)->where('ue', $ue)->where('gestion', $select)->first();
         if ($das) {
             $result = $das;
             return $result;
@@ -166,12 +166,16 @@ class CertificadoController extends Controller
     }
 
     public function getcert2($id){
-        $cert2 = Certificado2::where('cod_cert', $id)->first();
+        $cert2 = Certificado2::where('cod_cert', $id)->get();
+        $total = 0;
         if ($cert2) {
-            return $cert2;
+            foreach($cert2 as $temp){
+                $total += $temp->ppto_ley + $temp->ppto_mod - $temp->eje_com - $temp->reserva;
+            }
+            return [$cert2, $total];
         }
         else{
-            return '';
+            return [$cert2, $total];
         }
     }
 
@@ -192,7 +196,17 @@ class CertificadoController extends Controller
             $cert2->eje_com = $request->eje_com;
             $cert2->reserva = $request->reserva;
             $cert2->save();
-            return $cert2;
+            $certs2 = Certificado2::where('cod_cert', $request->cod_cert)->get();
+            $total = 0;
+            if ($certs2) {
+                foreach($certs2 as $temp){
+                    $total += $temp->ppto_ley + $temp->ppto_mod - $temp->eje_com - $temp->reserva;
+                }
+                return [$certs2, $total];
+            }
+            else{
+                return [$certs2, $total];
+            }
         }
         else{
             $cert2 = new Certificado2();
@@ -211,12 +225,29 @@ class CertificadoController extends Controller
             $cert2->eje_com = $request->eje_com;
             $cert2->reserva = $request->reserva;
             $cert2->save();
-            return $cert2;
+            $certs2 = Certificado2::where('cod_cert', $request->cod_cert)->get();
+            $total = 0;
+            if ($certs2) {
+                foreach($certs2 as $temp){
+                    $total += $temp->ppto_ley + $temp->ppto_mod - $temp->eje_com - $temp->reserva;
+                }
+                return [$certs2, $total];
+            }
+            else{
+                return [$certs2, $total];
+            }
         }
     }
 
     public function destroy2($id){
         $cert2 = Certificado2::find($id);
         $cert2->delete();
+        $certs2 = Certificado2::where('cod_cert', $cert2->cod_cert)->get();
+        if ($certs2) {
+            return $certs2;
+        }
+        else{
+            return '';
+        }
     }
 }
