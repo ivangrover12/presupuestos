@@ -32,6 +32,12 @@ class CertificadoController extends Controller
         return view('certificado.create');
     }
 
+    public function edit($secuencia)
+    {
+        // return view('certificado.edit');
+        return $secuencia;
+    }
+
     public function models(){
         $das = Das::where('entidad', 47)->where('da', 1)->first();
         $cert = Certificado::orderby('cod', 'DESC')->first();
@@ -124,11 +130,7 @@ class CertificadoController extends Controller
      * @param  \App\Certificado  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function edit($secuencia)
-    {
-        return $secuencia;
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *

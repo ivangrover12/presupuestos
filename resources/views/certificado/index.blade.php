@@ -17,11 +17,13 @@
     </div>
     <div class="card-body">
         <div v-if="secuencia" class="row">
-            <a class="btn btn-info">Editar</a>
+            <a class="btn btn-secondary" href="{{ route('certificado.create') }}">Nuevo</a>
+            <a class="btn btn-info" href="{{ route('certificado.create') }}">Editar</a>
             <button type="button" class="btn btn-danger">Reporte 1</button> 
             <button type="button" class="btn btn-danger">Reporte 2</button>
         </div>
         <div v-else class="row">
+            <a class="btn btn-secondary" href="{{ route('certificado.create') }}">Nuevo</a>
             <button type="button" class="btn btn-info" disabled>Editar</button> 
             <button type="button" class="btn btn-danger" disabled>Reporte 1</button> 
             <button type="button" class="btn btn-danger" disabled>Reporte 2</button>
@@ -36,6 +38,7 @@
                             <th>UE</th>
                             <th>PROG</th>
                             <th>PROY</th>
+                            <th>ACT</th>
                             <th>Fecha</th>
                             <th>Monto</th>
                         </tr>
@@ -48,6 +51,7 @@
                             <th>UE</th>
                             <th>PROG</th>
                             <th>PROY</th>
+                            <th>ACT</th>
                             <th>Fecha</th>
                             <th>Liter</th>
                         </tr>
@@ -60,6 +64,7 @@
                             <td>@{{ certificado.ue }}</td>
                             <td>@{{ certificado.prog }}</td>
                             <td>@{{ certificado.proy }}</td>
+                            <td>@{{ certificado.act }}</td>
                             <td>@{{ certificado.gestion }}</td>
                             <td></td>
                         </tr>
