@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        EJECUCION DE GASTO CORRIENTE
+        EJECUCION DE GASTO CORRIENTE - Registro
     </div>
     <div class="card-body">
         <div class="row">
