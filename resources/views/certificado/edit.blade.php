@@ -347,9 +347,9 @@ const app = new Vue({
     data(){
         return{
             select: '',
-            reserve: false,
-            step: false,
-            cert2: false,
+            reserve: true,
+            step: true,
+            cert2: true,
             certificado: {},
             certificados: [],
             certificados2: [],
@@ -564,6 +564,11 @@ const app = new Vue({
         this.gestion = yyyy;
         this.fecha = yyyy+'-'+mm+'-'+dd;
         this.select = yyyy;
+        axios.get('/getedit/'+{{$secuencia}}+'/'+this.gestion).then(response => {
+            this.certificados = response.data;
+            this.secuencia = {{$secuencia}};
+            this.fecha = this.certificados[0].gestion;
+        });
         //this.fecha = dd+'-'+mm+'-'+yyyy;
         // axios.get('/certificado/models').then(response =>{
         //     this.cod = response.data[1] + 1;

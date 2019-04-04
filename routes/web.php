@@ -26,7 +26,10 @@ Route::post('/new', 'CertificadoController@new');
 Route::get('/cert2/{id}', 'CertificadoController@getcert2');
 Route::post('/cert2/create', 'CertificadoController@addcert2');
 Route::delete('/cert2/delete/{id}', 'CertificadoController@destroy2');
+Route::get('/cert/edit/{secuencia}', 'CertificadoController@getedit')->name('certifi.edit');
+Route::get('/getedit/{secuencia}/{gestion}', 'CertificadoController@getcerti');
 Route::resource('certificado', 'CertificadoController');
+
 // Route::get('/edit/{secuencia}','CertificadoController@edit';
 // 	);
 Route::resource('registro', 'RegistroController');

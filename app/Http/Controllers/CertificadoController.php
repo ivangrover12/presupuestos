@@ -252,4 +252,13 @@ class CertificadoController extends Controller
             return '';
         }
     }
+
+    public function getedit($secuencia){
+        return view('certificado.edit', compact('secuencia'));
+    }
+
+    public function getcerti($secuencia, $gestion){
+        $certificados = Certificado::where('secuencia', $secuencia)->where('gest', $gestion)->orderBy('cod', 'DESC')->get();
+        return $certificados;
+    }
 }
