@@ -565,10 +565,29 @@ const app = new Vue({
         this.fecha = yyyy+'-'+mm+'-'+dd;
         this.select = yyyy;
         axios.get('/getedit/'+{{$secuencia}}+'/'+this.gestion).then(response => {
-            this.certificados = response.data;
-            this.secuencia = {{$secuencia}};
-            this.fecha = this.certificados[0].gestion;
-        });
+                    this.certificados = response.data;
+                    this.secuencia = {{$secuencia}};
+                    this.fecha = this.certificados[0].gestion;
+                    this.ue = this.certificados[0].ue;
+                    this.das.entidad = this.certificados[0].entidad;
+                    this.obs = this.certificados[0].obs;
+                    this.gast = this.certificados[0].tipo;
+                    this.prog = this.certificados[0].prog;
+                    this.act = this.certificados[0].act;
+                    this.proy = this.certificados[0].proy;
+
+
+                 axios.get('/find/findue/'+this.ue+'/'+this.select).then(res => {
+                    const temp = res.data;
+                    this.desc_ue = temp.desc_ue;
+                    this.das = temp;
+                });
+                 axios.get('/find/findgast/'+this.gast).then(response => {
+                    this.tipo_gasto = response.data;
+                });
+                
+                });
+
         //this.fecha = dd+'-'+mm+'-'+yyyy;
         // axios.get('/certificado/models').then(response =>{
         //     this.cod = response.data[1] + 1;
